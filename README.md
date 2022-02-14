@@ -2,9 +2,11 @@
 
 *DISCLAIMER: WORK IN PROGRESS/NOT PRODUCTION-READY*
 
+`tool-db` runs a [tool-db](https://github.com/Manwe-777/tool-db) server from your command line
+
 ## Installation
 
-`npm i -g tooldb-cli`
+`npm i -g tool-db-cli`
 
 ### Example: Watching an expression
 
