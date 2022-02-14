@@ -11,30 +11,30 @@ yargs
         builder: {
             db: {
                 describe: "database name to use",
-                type: "string"
+                type: "string",
             },
             storageName: {
                 describe: "our storage namespace",
                 default: "tooldb",
-                type: "string"
-            },  
+                type: "string",
+            },
             peers: {
                 describe: "comma-seperated list of URLs and IPs",
-                type: "string"
+                type: "string",
             },
             watch: {
                 describe: "comma-separated list of keys to watch",
-                type: "string"
+                type: "string",
             },
             host: {
                 describe: "set ip to listen on",
                 default: "127.0.0.1",
-                type: "string"
+                type: "string",
             },
             port: {
                 describe: "set port to listen on",
                 default: 8765,
-                type: "number"
+                type: "number",
             },
             // certs: {
             //     describe: "use https with cert files from PATH (key.pem, cert.pem, ca.pem)",
@@ -44,7 +44,7 @@ yargs
                 describe: "enable debug mode",
                 default: false,
                 type: "boolean",
-            }
+            },
         },
         handler: (argv) => {
             const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
@@ -52,7 +52,7 @@ yargs
                 const [host, port] = u.split(":");
                 return {
                     host,
-                    port: parseInt(port)
+                    port: parseInt(port),
                 };
             });
             serve({
@@ -63,9 +63,8 @@ yargs
                 host: argv["host"] as string,
                 port: argv["port"] as number,
                 // certs: argv["certs"] as (string | undefined),
-                debug: argv["debug"] as boolean
-            });    
-        }
+                debug: argv["debug"] as boolean,
+            });
+        },
     })
-    .help()
-    .argv;
+    .help().argv;

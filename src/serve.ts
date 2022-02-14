@@ -9,7 +9,7 @@ interface Config {
     db?: string;
     storageName: string;
     watch: string[];
-    peers: Array<{ host: string; port: number; }>;
+    peers: Array<{ host: string; port: number }>;
     host: string;
     port: number;
     // certs?: string;
@@ -18,7 +18,7 @@ interface Config {
 
 export async function serve(config: Config) {
     // let httpsConfig = null;
- 
+
     // if (config.certs) {
     //     httpsConfig = {
     //         key: fs.readFileSync(path.resolve(config.certs, "key.pem")),
@@ -37,7 +37,7 @@ export async function serve(config: Config) {
         debug: config.debug,
         server: true,
         host: config.host,
-        port: config.port
+        port: config.port,
         // httpServer: server,
     });
 
@@ -55,7 +55,10 @@ export async function serve(config: Config) {
         toolDb.addKeyListener(watchKey, (msg) => {
             const from = (msg as any).p as string;
             const data = (msg as any).v as string;
-            console.log(`${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,colors.green(JSON.stringify(data, null, "\t")));
+            console.log(
+                `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
+                colors.green(JSON.stringify(data, null, "\t"))
+            );
         });
     }
 }
