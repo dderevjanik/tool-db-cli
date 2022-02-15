@@ -5,7 +5,7 @@ import * as tooldb from "tool-db";
 // import * as fs from "fs";
 // import * as path from "path";
 
-interface Config {
+interface ServeConf {
     db?: string;
     storageName: string;
     watch: string[];
@@ -16,7 +16,7 @@ interface Config {
     debug: boolean;
 }
 
-export async function serve(config: Config) {
+export async function serve(config: ServeConf): Promise<void> {
     // let httpsConfig = null;
 
     // if (config.certs) {
@@ -45,10 +45,6 @@ export async function serve(config: Config) {
     console.log(`ToolDB node running at ${config.host}:${config.port}`);
     console.log();
     console.log(colors.gray(`File:  ${colors.yellow(config.storageName)}`));
-
-    toolDb.on("connection", () => {
-        console.log("Someone connected");
-    });
 
     console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
     for (const watchKey of config.watch) {

@@ -1,4 +1,5 @@
 import * as yargs from "yargs";
+import { readKey } from "./get";
 import { serve } from "./serve";
 
 yargs
@@ -66,5 +67,40 @@ yargs
                 debug: argv["debug"] as boolean,
             });
         },
+    })
+    .command({
+        command: "get",
+        describe: "get data using key",
+        builder: {
+            db: {
+                describe: "database name to use",
+                type: "string"
+            },
+            storageName: {
+                describe: "our storage namespace",
+                default: "tooldb",
+                type: "string",
+            },
+            peers: {
+                describe: "comma-seperated list of URLs and IPs",
+                type: "string",
+            }
+        },
+        handler: (argv) => {
+            const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
+            const peers = urls.map((u) => {
+                const [host, port] = u.split(":");
+                return {
+                    host,
+                    port: parseInt(port),
+                };
+            });
+            readKey({
+                db: argv["db"] as string,
+                storageName: argv["storageName"] as string,
+                key: argv._[1] as string,
+                peers,
+            })
+        }
     })
     .help().argv;
