@@ -46,6 +46,13 @@ export async function serve(config: ServeConf): Promise<void> {
     console.log();
     console.log(colors.gray(`File:  ${colors.yellow(config.storageName)}`));
 
+    toolDb.onConnect = () => {
+        console.log(colors.green("Connected to server peer"));
+    };
+    toolDb.onDisconnect = () => {
+        console.log(colors.red("Disconnected from server peer"));
+    };
+
     console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
     for (const watchKey of config.watch) {
         toolDb.addKeyListener(watchKey, (msg) => {

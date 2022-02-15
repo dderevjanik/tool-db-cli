@@ -48,7 +48,7 @@ yargs
                 type: "boolean",
             },
         },
-        handler: (argv) => {
+        handler: async (argv) => {
             const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
             const peers = urls.map((u) => {
                 const [host, port] = u.split(":");
@@ -57,7 +57,7 @@ yargs
                     port: parseInt(port),
                 };
             });
-            serve({
+            await serve({
                 db: argv["db"] as string,
                 storageName: argv["storageName"] as string,
                 watch: argv["watch"] ? (argv["watch"] as string).split(",") : [],
@@ -75,7 +75,7 @@ yargs
         builder: {
             db: {
                 describe: "database name to use",
-                type: "string"
+                type: "string",
             },
             storageName: {
                 describe: "our storage namespace",
@@ -85,9 +85,9 @@ yargs
             peers: {
                 describe: "comma-seperated list of URLs and IPs",
                 type: "string",
-            }
+            },
         },
-        handler: (argv) => {
+        handler: async (argv) => {
             const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
             const peers = urls.map((u) => {
                 const [host, port] = u.split(":");
@@ -96,13 +96,13 @@ yargs
                     port: parseInt(port),
                 };
             });
-            readKey({
+            await readKey({
                 db: argv["db"] as string,
                 storageName: argv["storageName"] as string,
                 key: argv._[1] as string,
                 peers,
-            })
-        }
+            });
+        },
     })
     .command({
         command: "put",
@@ -110,7 +110,7 @@ yargs
         builder: {
             db: {
                 describe: "database name to use",
-                type: "string"
+                type: "string",
             },
             storageName: {
                 describe: "our storage namespace",
@@ -120,9 +120,9 @@ yargs
             peers: {
                 describe: "comma-seperated list of URLs and IPs",
                 type: "string",
-            }
+            },
         },
-        handler: (argv) => {
+        handler: async (argv) => {
             const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
             const peers = urls.map((u) => {
                 const [host, port] = u.split(":");
@@ -131,13 +131,13 @@ yargs
                     port: parseInt(port),
                 };
             });
-            put({
+            await put({
                 db: argv["db"] as string,
                 storageName: argv["storageName"] as string,
                 key: argv._[1] as string,
                 value: argv._[2] as string,
                 peers,
-            })
-        }
+            });
+        },
     })
     .help().argv;
