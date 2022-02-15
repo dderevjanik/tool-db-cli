@@ -47,21 +47,37 @@ export async function serve(config: ServeConf): Promise<void> {
     console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
 
     toolDb.onConnect = () => {
+        // Provide serverPeerId
         console.log(colors.green("Connected to server peer"));
     };
     toolDb.onDisconnect = () => {
         console.log(colors.red("Disconnected from server peer"));
     };
 
-    console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
+    if (config.watch.length) {
+        console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
+    }
+
+    // if (config.certs) {
+    //     console.log(colors.gray(`Certs: ${colors.yellow(config.certs)}`));
+    // }
+
+    if (config.peers.length) {
+        const peers = config.peers.map((p) => colors.yellow(`${p.host}:${p.port}`)).join(", ");
+        console.log(colors.gray(`Peers: ${peers}`));
+    }
+
     for (const watchKey of config.watch) {
         toolDb.addKeyListener(watchKey, (msg) => {
-            const from = (msg as any).p as string;
-            const data = (msg as any).v as string;
-            console.log(
-                `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
-                colors.green(JSON.stringify(data, null, "\t"))
-            );
+            if (msg.type === "put") {
+                console.log(
+                    `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
+                    colors.green(JSON.stringify(msg.v, null, "\t"))
+                );
+            } else {
+                // CRDT
+                console.log(`${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}]`, colors.yellow("CRDT"));
+            }
         });
     }
 }
