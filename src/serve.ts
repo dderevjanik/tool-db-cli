@@ -44,7 +44,7 @@ export async function serve(config: ServeConf): Promise<void> {
     console.log();
     console.log(`ToolDB node running at ${config.host}:${config.port}`);
     console.log();
-    console.log(colors.gray(`File:  ${colors.yellow(config.storageName)}`));
+    console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
 
     toolDb.onConnect = () => {
         console.log(colors.green("Connected to server peer"));

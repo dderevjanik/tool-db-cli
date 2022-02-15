@@ -12,23 +12,34 @@
 
 Start local tool-db server:
 
-`tool-db serve --port=8222 watch=foobar`
+`tool-db serve --port=8000 watch=foobar`
 
 Connect and put data from another local server:
 
-```js
-const ToolDb = require("tooldb").ToolDb;
+`tool-db put --peers=0.0.0.0:8000 foobar myvalue`
 
-const tooldb = new ToolDb({
-    peers: [{ host: "127.0.0.1", port: 8222 }],
-    server: false,
-});
-client.onConnect = async () => {
-    await client.anonSignIn();
-    await client.putData("foobar", "my-test-data");
+### Example: Creating a redundant mesh network
 
-}
+![Connecting two browsers, A and B, over a mesh of tool-db peers, 1 through 4](./docs/mesh-network.png)
+
+**start a small mesh network of tool-db servers**, each listening on a different IP and saving data in a different folder.
+
+```console
+tool-db --host 127.0.0.1 --peers 127.0.0.3,127.0.0.4  --storageName=data1 # 1
+tool-db --host 127.0.0.2 --peers 127.0.0.3,127.0.0.4  --storageName=data2 # 2
+
+tool-db --host 127.0.0.3 --peers 127.0.0.1,127.0.0.2  --storageName=data3 # 3
+tool-db --host 127.0.0.4 --peers 127.0.0.1,127.0.0.2  --storageName=data4 # 4
 ```
+
+**now play around with shutting down individual peers and bringing them back online**
+
+As long as there is a path through the mesh network, the heartbeats will propagate from B to A. 
+
+But if peers 1 and 2 (or peers 3 and 4) simultainiously go down, A and B are seperated 
+and updates won't go through. However, ToolDB peers will try to reestablish the connection 
+to a lost peer, so as soon as you bring one of the peers back online, they will reconnect 
+and updates will go through again. 
 
 ## Usage
 
