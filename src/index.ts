@@ -1,5 +1,6 @@
 import * as yargs from "yargs";
 import { readKey } from "./get";
+import { put } from "./put";
 import { serve } from "./serve";
 
 yargs
@@ -99,6 +100,42 @@ yargs
                 db: argv["db"] as string,
                 storageName: argv["storageName"] as string,
                 key: argv._[1] as string,
+                peers,
+            })
+        }
+    })
+    .command({
+        command: "put",
+        describe: "put data",
+        builder: {
+            db: {
+                describe: "database name to use",
+                type: "string"
+            },
+            storageName: {
+                describe: "our storage namespace",
+                default: "tooldb",
+                type: "string",
+            },
+            peers: {
+                describe: "comma-seperated list of URLs and IPs",
+                type: "string",
+            }
+        },
+        handler: (argv) => {
+            const urls = argv["peers"] ? (argv["peers"] as string).split(",") : [];
+            const peers = urls.map((u) => {
+                const [host, port] = u.split(":");
+                return {
+                    host,
+                    port: parseInt(port),
+                };
+            });
+            put({
+                db: argv["db"] as string,
+                storageName: argv["storageName"] as string,
+                key: argv._[1] as string,
+                value: argv._[2] as string,
                 peers,
             })
         }
