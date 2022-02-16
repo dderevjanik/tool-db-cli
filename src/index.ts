@@ -41,7 +41,7 @@ yargs
             },
             repl: {
                 describe: "go into a repl (with tooldb instance)",
-                type: "boolean"
+                type: "boolean",
             },
             // certs: {
             //     describe: "use https with cert files from PATH (key.pem, cert.pem, ca.pem)",

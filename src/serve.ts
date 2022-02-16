@@ -43,46 +43,53 @@ export async function serve(config: ServeConf): Promise<toolDb.ToolDb> {
 
     const p = "http";
 
-    console.log();
-    console.log(`ToolDB node running at ${p}://${config.host}:${config.port}`);
-    console.log();
-    // console.log(colors.gray(`Id: ${colors.yellow(toolDb.options.id)}`));
-    console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
+    return new Promise((resolve, _) => {
+        tooldb.addListener("init", () => {
+            console.log();
+            console.log(`ToolDB node running at ${p}://${config.host}:${config.port}`);
+            console.log();
+            console.log(colors.gray(`Id: ${colors.yellow(tooldb.options.id)}`));
+            console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
 
-    tooldb.onConnect = () => {
-        // Provide serverPeerId
-        console.log(colors.green("Connected to server peer"));
-    };
-    tooldb.onDisconnect = () => {
-        console.log(colors.red("Disconnected from server peer"));
-    };
+            tooldb.onConnect = () => {
+                // Provide serverPeerId
+                console.log(colors.green("Connected to server peer"));
+            };
+            tooldb.onDisconnect = () => {
+                console.log(colors.red("Disconnected from server peer"));
+            };
 
-    if (config.watch.length) {
-        console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
-    }
-
-    // if (config.certs) {
-    //     console.log(colors.gray(`Certs: ${colors.yellow(config.certs)}`));
-    // }
-
-    if (config.peers.length) {
-        const peers = config.peers.map((p) => colors.yellow(`${p.host}:${p.port}`)).join(", ");
-        console.log(colors.gray(`Peers: ${peers}`));
-    }
-
-    for (const watchKey of config.watch) {
-        tooldb.addKeyListener(watchKey, (msg) => {
-            if (msg.type === "put") {
-                console.log(
-                    `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
-                    colors.green(JSON.stringify(msg.v, null, "\t"))
-                );
-            } else {
-                // CRDT
-                console.log(`${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}]`, colors.yellow("CRDT"));
+            if (config.watch.length) {
+                console.log(colors.gray(`Watching: ${colors.yellow(config.watch.join(", "))}`));
             }
-        });
-    }
 
-    return tooldb;
+            // if (config.certs) {
+            //     console.log(colors.gray(`Certs: ${colors.yellow(config.certs)}`));
+            // }
+
+            if (config.peers.length) {
+                const peers = config.peers.map((p) => colors.yellow(`${p.host}:${p.port}`)).join(", ");
+                console.log(colors.gray(`Peers: ${peers}`));
+            }
+
+            for (const watchKey of config.watch) {
+                tooldb.addKeyListener(watchKey, (msg) => {
+                    if (msg.type === "put") {
+                        console.log(
+                            `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
+                            colors.green(JSON.stringify(msg.v, null, "\t"))
+                        );
+                    } else {
+                        // CRDT
+                        console.log(
+                            `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}]`,
+                            colors.yellow("CRDT")
+                        );
+                    }
+                });
+            }
+
+            resolve(tooldb);
+        });
+    });
 }

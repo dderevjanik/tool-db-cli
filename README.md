@@ -55,6 +55,16 @@ tool-db --host=8083 --peers=127.0.0.1:8081,127.0.0.1:8082  --storageName=data3 #
 tool-db --host=8084 --peers=127.0.0.1:8081,127.0.0.1:8082  --storageName=data4 # 4
 ```
 
+On client side
+
+```html
+<script src="https://unpkg.com/tool-db/bundle.js">
+<script>
+    const { ToolDb } = tooldb;
+    const tdb = new ToolDb({ peers: [{ host: "localhost", port: 8080 }], debug: true });
+</script>
+```
+
 **now play around with shutting down individual peers and bringing them back online**
 
 As long as there is a path through the mesh network, the heartbeats will propagate from B to A. 
