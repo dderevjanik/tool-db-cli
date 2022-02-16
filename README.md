@@ -80,5 +80,6 @@ Options:
   --watch        comma-separated list of keys to watch                  [string]
   --host         set ip to listen on             [string] [default: "127.0.0.1"]
   --port         set port to listen on                  [number] [default: 8080]
+  --repl         go into a repl (with tooldb instace)                     [boolean]
   --debug        enable debug mode                    [boolean] [default: false]
 ```

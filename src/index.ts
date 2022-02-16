@@ -6,7 +6,7 @@ import { serve } from "./serve";
 
 yargs
     .scriptName("tool-db")
-    .version("0.0.1")
+    .version("0.0.2")
     .usage("$0 <cmd> [args]")
     .command({
         command: "serve",
@@ -40,7 +40,7 @@ yargs
                 type: "number",
             },
             repl: {
-                describe: "go into a repl (with gun instace)",
+                describe: "go into a repl (with tooldb instance)",
                 type: "boolean"
             },
             // certs: {
