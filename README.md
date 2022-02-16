@@ -12,7 +12,7 @@
 
 Start local tool-db server:
 
-`tool-db serve --port=8000 watch=foobar`
+`tool-db serve watch=foobar`
 
 Connect and put data from another local server:
 
@@ -24,12 +24,12 @@ Connect and put data from another local server:
 
 **start a small mesh network of tool-db servers**, each listening on a different IP and saving data in a different folder.
 
-```console
-tool-db --host 127.0.0.1 --peers 127.0.0.3,127.0.0.4  --storageName=data1 # 1
-tool-db --host 127.0.0.2 --peers 127.0.0.3,127.0.0.4  --storageName=data2 # 2
+```sh
+tool-db --host=8081 --peers=127.0.0.1:8083,127.0.0.1:8084  --storageName=data1 # 1
+tool-db --host=8082 --peers=127.0.0.1:8083,127.0.0.1:8084  --storageName=data2 # 2
 
-tool-db --host 127.0.0.3 --peers 127.0.0.1,127.0.0.2  --storageName=data3 # 3
-tool-db --host 127.0.0.4 --peers 127.0.0.1,127.0.0.2  --storageName=data4 # 4
+tool-db --host=8083 --peers=127.0.0.1:8081,127.0.0.1:8082  --storageName=data3 # 3
+tool-db --host=8084 --peers=127.0.0.1:8081,127.0.0.1:8082  --storageName=data4 # 4
 ```
 
 **now play around with shutting down individual peers and bringing them back online**
@@ -56,6 +56,6 @@ Options:
   --peers        comma-seperated list of URLs and IPs                   [string]
   --watch        comma-separated list of keys to watch                  [string]
   --host         set ip to listen on             [string] [default: "127.0.0.1"]
-  --port         set port to listen on                  [number] [default: 8765]
+  --port         set port to listen on                  [number] [default: 8080]
   --debug        enable debug mode                    [boolean] [default: false]
 ```
