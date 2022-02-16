@@ -41,9 +41,12 @@ export async function serve(config: ServeConf): Promise<void> {
         // httpServer: server,
     });
 
+    const p = "http";
+
     console.log();
-    console.log(`ToolDB node running at ${config.host}:${config.port}`);
+    console.log(`ToolDB node running at ${p}://${config.host}:${config.port}`);
     console.log();
+    // console.log(colors.gray(`Id: ${colors.yellow(toolDb.options.id)}`));
     console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
 
     toolDb.onConnect = () => {
