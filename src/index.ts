@@ -1,4 +1,5 @@
 import * as yargs from "yargs";
+import * as repl from "repl";
 import { readKey } from "./get";
 import { put } from "./put";
 import { serve } from "./serve";
@@ -38,6 +39,10 @@ yargs
                 default: 8080,
                 type: "number",
             },
+            repl: {
+                describe: "go into a repl (with gun instace)",
+                type: "boolean"
+            },
             // certs: {
             //     describe: "use https with cert files from PATH (key.pem, cert.pem, ca.pem)",
             //     type: "string"
@@ -57,7 +62,7 @@ yargs
                     port: parseInt(port),
                 };
             });
-            await serve({
+            const tooldb = await serve({
                 db: argv["db"] as string,
                 storageName: argv["storageName"] as string,
                 watch: argv["watch"] ? (argv["watch"] as string).split(",") : [],
@@ -67,6 +72,10 @@ yargs
                 // certs: argv["certs"] as (string | undefined),
                 debug: argv["debug"] as boolean,
             });
+            if (argv["repl"] === true) {
+                const r = repl.start(">");
+                r.context["tooldb"] = tooldb;
+            }
         },
     })
     .command({

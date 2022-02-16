@@ -1,5 +1,5 @@
 import colors from "colors/safe";
-import * as tooldb from "tool-db";
+import * as toolDb from "tool-db";
 // import * as http from "http";
 // import * as https from "https";
 // import * as fs from "fs";
@@ -16,7 +16,7 @@ interface ServeConf {
     debug: boolean;
 }
 
-export async function serve(config: ServeConf): Promise<void> {
+export async function serve(config: ServeConf): Promise<toolDb.ToolDb> {
     // let httpsConfig = null;
 
     // if (config.certs) {
@@ -30,7 +30,7 @@ export async function serve(config: ServeConf): Promise<void> {
     // const server = httpsConfig ? https.createServer(httpsConfig) : http.createServer();
     // server.listen(config.port, config.host);
 
-    const toolDb = new tooldb.ToolDb({
+    const tooldb = new toolDb.ToolDb({
         db: config.db,
         storageName: config.storageName,
         peers: config.peers,
@@ -49,11 +49,11 @@ export async function serve(config: ServeConf): Promise<void> {
     // console.log(colors.gray(`Id: ${colors.yellow(toolDb.options.id)}`));
     console.log(colors.gray(`Storage:  ${colors.yellow(config.storageName)}`));
 
-    toolDb.onConnect = () => {
+    tooldb.onConnect = () => {
         // Provide serverPeerId
         console.log(colors.green("Connected to server peer"));
     };
-    toolDb.onDisconnect = () => {
+    tooldb.onDisconnect = () => {
         console.log(colors.red("Disconnected from server peer"));
     };
 
@@ -71,7 +71,7 @@ export async function serve(config: ServeConf): Promise<void> {
     }
 
     for (const watchKey of config.watch) {
-        toolDb.addKeyListener(watchKey, (msg) => {
+        tooldb.addKeyListener(watchKey, (msg) => {
             if (msg.type === "put") {
                 console.log(
                     `${new Date().toLocaleTimeString()}\t[${colors.yellow(watchKey)}] =>`,
@@ -83,4 +83,6 @@ export async function serve(config: ServeConf): Promise<void> {
             }
         });
     }
+
+    return tooldb;
 }
