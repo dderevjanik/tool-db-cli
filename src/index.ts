@@ -35,7 +35,7 @@ yargs
             },
             port: {
                 describe: "set port to listen on",
-                default: 8765,
+                default: 8080,
                 type: "number",
             },
             // certs: {
