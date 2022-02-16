@@ -18,6 +18,29 @@ Connect and put data from another local server:
 
 `tool-db put --peers=0.0.0.0:8000 foobar myvalue`
 
+### Example: Using repl
+
+Start local tool-db server with `--repl`
+
+`tool-db serve --repl`
+
+Output
+
+```
+
+ToolDB node running at http://127.0.0.1:8080
+
+Storage:  tooldb
+>
+```
+
+You can access access `tooldb` instance directly from repl
+
+```
+> await tooldb.anonSignIn();
+> await tooldb.putData("key", "value")
+```
+
 ### Example: Creating a redundant mesh network
 
 ![Connecting two browsers, A and B, over a mesh of tool-db peers, 1 through 4](./docs/mesh-network.png)
