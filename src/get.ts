@@ -12,6 +12,7 @@ export async function readKey(config: ReadConf): Promise<void> {
         db: config.db,
         storageName: config.storageName,
         peers: config.peers,
+        server: false,
     });
 
     toolDb.onConnect = async () => {
