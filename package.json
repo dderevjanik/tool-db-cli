@@ -1,6 +1,6 @@
 {
     "name": "tool-db-cli",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "run tooldb command from commandline",
     "main": "dist/index.js",
     "preferGlobal": true,
