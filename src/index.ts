@@ -1,5 +1,6 @@
 import * as yargs from "yargs";
 import * as repl from "repl";
+import { ToolDb } from "tool-db";
 import { readKey } from "./get";
 import { put } from "./put";
 import { serve } from "./serve";
@@ -73,7 +74,7 @@ yargs
                 debug: argv["debug"] as boolean,
             });
             if (argv["repl"] === true) {
-                const r = repl.start(">");
+                const r = repl.start("> ");
                 r.context["tooldb"] = tooldb;
             }
         },
